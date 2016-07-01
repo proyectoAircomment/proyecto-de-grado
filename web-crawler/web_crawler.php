@@ -11,6 +11,7 @@
             $this->metars = Array();
             $this->assoc_metar = Array();
             $this->url = $url;
+            $this->createAssocArray();
         }
         
         //Obtiene el contenido de una pagina web
