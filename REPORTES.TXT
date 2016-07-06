@@ -1,0 +1,38 @@
+El encabezado es común para todos:
+        QU ANPOCFC
+        
+        .DDLXCXA 231959
+        
+        A80
+        
+        FI FC8138/AN HK-4818
+        
+        DT DDL SMR 231959 M55A
+
+
+Reporte de posición:
+        - 3N01 POSRPT 8138/23 SKBO/SKBQ HK-4818
+        
+        /UTC 195906/POS N09216W074273/ALT +35133/MCH 749/FOB 00475
+        
+Reporte OOOI:
+        - 1001 OUTRP 8152 / SKSP/SKBO HK-4818
+        
+        /OUT 2050/FOB 0039/BRD /UNT LITERS /TYP A
+        ---------------------------
+        - 1101 OFFRP 8152 / SKBO/SKCG HK-4818
+        
+        /OUT 2230/OFF 2305/FOB 0071/ETA
+        ----------------------------
+        - 1201 ONRP 8152/ SKBO/SKCG HK-4818
+        
+        /ON 0006/FOB 0044
+        -----------------------
+        - 1301 INRP 8152/ SKBO/SKCG HK-4818
+        
+        /ON 0006/IN 0013/FOB 0044
+        
+Reporte meteorológico:
+        - 001 WXRQ 8149/03 SKBO/SKRG HK-4811
+        
+        /TYP 1/STA SKRG/STA SKBO

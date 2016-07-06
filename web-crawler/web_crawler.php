@@ -50,8 +50,8 @@
             return $this->assoc_metar;
         }
         
-        //obtiene el mensaje obtenido de la consulta de una ciudad específica
-        function getItemFromAssocArray($item)
+        //obtiene el mensaje de la consulta de una ciudad específica
+        function conocerMetarDe($item)
         {
             return $this->assoc_metar[$item];
         }

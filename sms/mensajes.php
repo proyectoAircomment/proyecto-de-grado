@@ -1,21 +1,24 @@
 <?php
 
     require('database.php');
+    require('../web-crawler/web_crawler.php');
     class Mensajes
     {
-        public $database;
+        public $database, $reportDecoder, $crawler;
+        private $metarMsj;
         
         public function __construct()
         {
             $this->database = new Database();
-            $this->contestarSms($this->recibirSmsReport());
+            $this->crawler = new Crawler();
+            $this->recibirSmsReport();
         }
         
         function recibirSmsReport()
         {
-            $url_log = 'https://api.infobip.com/sms/1/inbox/logs';
+            $url_report = 'https://api.infobip.com/sms/1/reports';
     
-            $ch = curl_init($url_log);  
+            $ch = curl_init($url_report);  
         
             curl_setopt($ch, CURLOPT_HTTPHEADER, 
                         array
@@ -34,7 +37,42 @@
             
             curl_close($ch);
             
-            return $data['results'];
+            $smsArr = $data['results'];
+            
+            if($smsArr == null)
+            {
+                echo 'datos nulos';
+            }else
+            {
+                for($i = 0; i< strlen($smsArr); $i++)
+                {
+                    $to = $smsArr[$i]['to'];
+                    $from = $smsArr[$i]['from'];
+                    $message = $smsArr[$i]['text'];
+                    $hour = $smsArr[$i]['receivedAt'];
+                    
+                    //guardado de mensaje recibido en db
+                    $database->guardar($to,$from,$message,$hour);
+                    
+                    //con el mensaje recibido se consulta en el webcarwler 
+                    //y se responde en funcion de lo solicitado
+                    
+                    //se asigna el texto del mensaje al constructor q la clase ReportDecoder toma
+                    //como parámetro de contenido del mensaje (cabecera y contenido)
+                    $this->reportDecoder = new ReportDecoder($message);
+                    //si el tipo de reporte es METAR...
+                    if($this->reportDecoder->getTipoReporte() == 'WXRQ')
+                    {
+                        //se ejecuta la función de conocer el metar de alguna ciudad, cuál?
+                        //la ciudad que indicaba el mensaje. Esta se le pasa como parámetro
+                        //obtenido de la función getCiudadDeReporte de la clase ReportDecoder
+                        $this->metarMsj = $this->crawler->conocerMetarDe($this->reportDecoder->getCiudadDeReporte());
+                        enviarSms($from,"InfoSMS",$metarMsj);
+                    }
+                    
+                }
+                
+            }
         }
         
         
@@ -66,28 +104,8 @@
         }
         
         
-        function contestarSms($smsArr)
-        {
-            if($smsArr == null)
-            {
-                echo 'datos nulos';
-            }else
-            {
-                for($i = 0; i< strlen($smsArr); $i++)
-                {
-                    $to = $smsArr[$i]['to'];
-                    $from = $smsArr[$i]['from'];
-                    $message = $smsArr[$i]['text'];
-                    $hour = $smsArr[$i]['receivedAt'];
-                    
-                    $database->guardar($to,$from,$message,$hour);
-                    enviarSms($from,$to,$message);
-                }
-                
-            }
-    
-            error_log($result.'se esta ejecutando la peticion.');
-        }
+        
 
+        
     }
 ?>

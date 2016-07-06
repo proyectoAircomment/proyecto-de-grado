@@ -1,9 +1,15 @@
 <?php
 
     require('web-crawler/web_crawler.php');
+    require('sms/mensajes.php');
+    require('sms/report_decoder.php');
+    
+    $sms = new Mensajes();
+    $decoder = new ReportDecoder();
+    
     
     //http://190.27.249.245/
-    $link = "http://190.27.249.248/obs";
+    /*$link = "http://190.27.249.248/obs";
     
     $crawler = new Crawler($link);
     
@@ -30,7 +36,9 @@ DT DDL MTR 032259 M50A
 
 /TYP 1/STA SKRG/STA SKBO';
 
-echo strlen($metar);
+echo strlen($metar);*/
+
+    
 
 ?>
 
