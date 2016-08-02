@@ -3,6 +3,7 @@
     {
         private $mensaje, $tipo;
         private $cabecera,$contenido;
+        private $arrayTipoMetar,$assocArrayMetar;
         
         public function __construct($mensaje = 'QU ANPOCFC
 
@@ -31,7 +32,8 @@
         {
             $msj = preg_split('[ - ]',$mensaje);
             $this->cabecera = explode(' ', $msj[0]);
-            $this->contenido = explode(' ', $msj[1]);
+            $this->contenido = str_replace('/',' ',$msj[1]);
+            
         }
         
         function getCabecera()
@@ -52,26 +54,52 @@
             return $this->tipo;
         }
         
-        function getCiudadDeReporte()
+        function setArray()
         {
-            return 'SKBO';
-        }
-        
-        function administrarReportes($tipo)
-        {
-            switch ($tipo) 
+            $arr = preg_split("/[\s,]+/",$this->contenido);
+            switch ($arr[1]) 
             {
                 case 'WXRQ':
-                    //HACER ALGO
+                    $this->setArrayMetar();
                     break;
                 
                 default:
                     //HACER ALGO
                     break;
             }
+            
         }
         
+        function setArrayMetar()
+        {
+            $citiesReport = preg_split("/[\s,]+/",trim(str_replace('STA','',strstr($this->contenido,'STA'))));
+            $arr = preg_split("/[\s,]+/",$this->contenido);
+            $this->assocArrayMetar = array('messageHeader'=>$arr[0].' '.$arr[1],
+                                     'flightNumber' =>$arr[2],
+                                     'flightDay'    =>$arr[3],
+                                     'origin'       =>$arr[4],
+                                     'destination'  =>$arr[5],
+                                     'aircraftId'   =>$arr[6],
+                                     'reportId'     =>$arr[7].' '.$arr[8],
+                                     'citiesReport' =>$citiesReport);
+            var_dump($this->assocArrayMetar);
+        }
         
+        //falta implementarlo correctamente
+        function getAeropuertosDeReporte()
+        {
+            return $this->assocArrayMetar['citiesReport'];
+        }
+        
+        function administrarReportes($tipo)
+        {
+            
+        }
+        
+        function sacarCiudadesdeEminsionDeAcuerdoAlTipo()
+        {
+            //falta implementarlo
+        }
         
         
         

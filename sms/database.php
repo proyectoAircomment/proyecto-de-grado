@@ -25,7 +25,7 @@
             
             mysql_select_db($db);
             
-            $sql = "INSERT INTO `infobip_sms`.`mensajes` (`id`, `to`, `from`, `date`) VALUES (NULL, '".$to."', '".$from."', '".$hour."');";
+            $sql = "INSERT INTO `infobip_sms`.`mensajes` (`id`, `to`, `from`, `message`, `date`) VALUES (NULL, '".$to."', '".$from."', '".$hour."');";
             $res = mysql_query($sql,$conn);
             
             if($res)

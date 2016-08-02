@@ -2,16 +2,36 @@
 
     require('web-crawler/web_crawler.php');
     require('sms/mensajes.php');
+    require('sms/database.php');
     require('sms/report_decoder.php');
+
+    $link = "http://190.27.249.248/obs";
+    //$sms = new Mensajes();
+
+    //$db = new Database();
     
-    $sms = new Mensajes();
-    $decoder = new ReportDecoder();
+    //$db->guardar('yo','el','mensaje','ahora');
+    
+    $crawler = new Crawler($link);
+    
+    
+    $rd = new ReportDecoder();
+    echo 'Contenido (formateado) del mensaje: <hr>';
+    echo $rd->getContenido();
+    echo '<hr> Array que contiene el mensaje METAR desglosado: <hr>';
+    $rd->setArray();
+    
+    echo '<hr>Metars: <hr>';
+    foreach($rd->getAeropuertosDeReporte() as $city)
+    {
+        echo $crawler->conocerMetarDe($city).'<br>';
+    }
     
     
     //http://190.27.249.245/
-    /*$link = "http://190.27.249.248/obs";
+    /*
     
-    $crawler = new Crawler($link);
+    
     
     $crawler->printTextArray($crawler->getArray());
     echo '<br>';

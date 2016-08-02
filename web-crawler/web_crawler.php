@@ -6,7 +6,7 @@
     {
         private $metars, $assoc_metar, $url;
         
-        public function __construct($url)
+        public function __construct($url="http://190.27.249.248/obs")
         {
             $this->metars = Array();
             $this->assoc_metar = Array();
