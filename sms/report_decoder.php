@@ -4,25 +4,14 @@
         private $mensaje, $tipo;
         private $cabecera,$contenido;
         private $arrayTipoMetar,$assocArrayMetar,$assocArrayPosRpt;
+        private $position;
         
-        public function __construct($mensaje = 'QU ANPOCFC
-
-                                .DDLXCXA 032259
-                                
-                                WXR
-                                
-                                FI FC8149/AN HK-4811
-                                
-                                DT DDL MTR 032259 M50A
-                                
-                                - 3N01 POSRPT 8138/23 SKBO/SKBQ HK-4818
-        
-        /UTC 195906/POS N09216W074273/ALT +35133/MCH 749/FOB 00475')
+        public function __construct()
         {
             $this->mensaje = $mensaje;
             $this->cabecera = '';
             $this->contenido = '';
-            $this->formatearComponentes($this->mensaje);
+            
         }
 
         
@@ -56,8 +45,10 @@
         
         //crea uno o varios arrays dependiendo del tipo de reporte
         //emitido de la aeronave hacia el sistema
-        function setArray()
+        function setArray($message)
         {
+            $this->formatearComponentes($message);
+            //divide el mensaje según espacios y barras
             $arr = preg_split("/[\s,]+/",$this->contenido);
             //la posición 1 del vetor contiene el tipo de reporte
             switch ($arr[1]) 
@@ -120,7 +111,7 @@
             $degsLon = substr($toSplit[3],0,-3);
             
             //asignación de los valores de orientación a la posición como un array
-            $position = array('lat' => array('direction'=>$dirLat, 'dms'=>array('d'=>$degsLat,'m'=>$minsLat,'s'=>$segsLat)), 
+            $this->position = array('lat' => array('direction'=>$dirLat, 'dms'=>array('d'=>$degsLat,'m'=>$minsLat,'s'=>$segsLat)), 
                               'lon' => array('direction'=>$dirLon, 'dms'=>array('d'=>$degsLon,'m'=>$minsLon,'s'=>$segsLon)));
             //asigna los valores del array asociativo
             $this->assocArrayPosRpt = array(
@@ -131,7 +122,7 @@
                                      'destination'  =>$arr[5],
                                      'aircraftId'   =>$arr[6],
                                      'UTCtime'      =>$arr[7],
-                                     'position'     =>$position,
+                                     'position'     =>$this->position,
                                      'altitude'     =>$arr[9],
                                      'speed'        =>$arr[10],
                                      'fuel'         =>$arr[11]);
@@ -153,6 +144,11 @@
         function getArrayPosRpt()
         {
             return $this->assocArrayPosRpt;
+        }
+        
+        function getPosition()
+        {
+            return $this->position;
         }
         
         //del array de solicitudes Metar creado

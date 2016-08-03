@@ -4,6 +4,7 @@
     require('sms/mensajes.php');
     require('sms/database.php');
     require('sms/report_decoder.php');
+    require('viewer_flights/coords_format.php');
 
     $link = "http://190.27.249.248/obs";
     //$sms = new Mensajes();
@@ -12,20 +13,52 @@
     
     //$db->guardar('yo','el','mensaje','ahora');
     
+    $mensaje = 'QU ANPOCFC
+
+                                .DDLXCXA 032259
+                                
+                                WXR
+                                
+                                FI FC8149/AN HK-4811
+                                
+                                DT DDL MTR 032259 M50A
+                                
+                                - 3N01 POSRPT 8138/23 SKBO/SKBQ HK-4818
+        
+        /UTC 195906/POS N09216W074273/ALT +35133/MCH 749/FOB 00475';
+    
     $crawler = new Crawler($link);
-    
-    
     $rd = new ReportDecoder();
+    $coords = new CoordsFormat();
     
     echo 'Contenido (formateado) del mensaje: <hr>';
     
     echo $rd->getContenido();
     
     echo '<hr> Array que contiene el mensaje METAR desglosado: <hr>';
-    $rd->setArray();
+    $rd->setArray($mensaje);
     var_dump($rd->getArrayPosRpt());
     
-    echo json_encode($rd->getArrayPosRpt());
+    $position = $rd->getPosition();
+    
+    $latDir = $position['lat']['direction'];
+    $latVal = $position['lat']['dms'];
+    
+    $lonDir = $position['lon']['direction'];
+    $lonVal = $position['lon']['dms'];
+    
+    echo '<hr>';
+    echo $latDir.', '.$latVal.';  '.$lonDir.', '.$lonVal;
+    
+    $coords->setLat($latDir,$latVal);
+    $coords->setLon($lonDir,$lonVal);
+    echo '<hr>';
+    echo $coords->getLat();
+    echo '<br>';
+    echo $coords->getLon();
+    
+    
+    //echo json_encode($rd->getArrayPosRpt());
     /*echo '<hr>Metars: <hr>';
     foreach($rd->getAeropuertosDeReporteMetar() as $city)
     {
