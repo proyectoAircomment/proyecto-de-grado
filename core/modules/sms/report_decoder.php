@@ -66,7 +66,8 @@
                     break;
                 
                 default:
-                    //HACER ALGO
+                    console.log('La palabra no coincide con el tipo de mensaje requerido.');
+                    console.log('Una posible causa es que la estructura del mensaje cambio');
                     break;
             }
             

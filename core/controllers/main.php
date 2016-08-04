@@ -1,10 +1,6 @@
 <?php
 
-    require('web-crawler/web_crawler.php');
-    require('sms/mensajes.php');
-    require('sms/database.php');
-    require('sms/report_decoder.php');
-    require('viewer_flights/coords_format.php');
+
 
     $link = "http://190.27.249.248/obs";
     //$sms = new Mensajes();
